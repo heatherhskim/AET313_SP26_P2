@@ -24,13 +24,13 @@ void setup(){
 
   // button setup
   heartButton.attach(8, INPUT_PULLUP);
-  heartButton.interval(20);
+  heartButton.interval(30); 
   ringButton.attach(9, INPUT_PULLUP);
-  ringButton.interval(20);
+  ringButton.interval(30);
   poisonButton.attach(10, INPUT_PULLUP);
-  poisonButton.interval(20);
+  poisonButton.interval(30);
   swordButton.attach(11, INPUT_PULLUP);
-  swordButton.interval(20);
+  swordButton.interval(30);
 
   // servo setup
   servo1_180.attach(2);
@@ -50,47 +50,68 @@ void loop(){
   ringButton.update();
   poisonButton.update();
   swordButton.update();
-
-  // Scene 1
+    
+// Scene 1
   // - (input signal) prop interaction 
   heartButton.read();
+  
   if (heartButton.fell()){
+    Serial.println("Scene 1 Activated! Dancefloor spinning.");
     // - (NEED TO ADD)(output) LED light on, rainbow light
     // pixels.setPixelColor()
-    // - (output) dancefloor servo doing 360 repeatedly
-    servo1_360.write(360);
     
+    // 180 starts the continuous servo at full speed. 
+    // Change to 0 to spin the other way.
+    servo1_360.write(180); 
   }
 
   // Scene 2
   // - (input signal) prop interaction 
   ringButton.read();
+
   if (ringButton.fell()){
-    // - (NEED TO ADD)(output) LED light on
-    // pixels.setPixelColor()
+      Serial.println("Scene 2 Activated");
   }
+  Serial.println("Scene 2: Warm White LED");
+  for(int i=0; i<=12; i++) pixels.setPixelColor(i, pixels.Color(0, 0, 0)); // 이전 LED 끄기
+  for(int i=43; i<=52; i++) pixels.setPixelColor(i, pixels.Color(255, 100, 20));
+  pixels.show();
+  delay(15000);
 
   // Scene 3
   // - (input signal) poison prop interaction 
+  Serial.println("Scene 3: Blue-Purple LED");
+  for(int i=13; i<=42; i++) {
+    if(i % 2 == 0) pixels.setPixelColor(i, pixels.Color(0, 0, 255));
+    else pixels.setPixelColor(i, pixels.Color(100, 0, 255));
+  }
+  pixels.show();
   poisonButton.read();
   // - (output) romeo collapse <- need to discuss how
   // - (output) juliet casket servo 180 moving 90 degrees
   if (poisonButton.fell()){
-    // - (NEED TO ADD)(output) LED light on, blueish light
-    // pixels.setPixelColor()
+      Serial.println("Scene 3 Activated");
     servo1_180.write(180); // romeo collapse
-    delay(500);
-    // - (NEED TO ADD)(output) LED light on, red light twinkling
-    // pixels.setPixelColor()
+    delay(10000);
     servo2_180.write(180); // juliet casket
     servo2_180.write(90);
   }
+
+  for(int j=0; j<15; j++) {
+    for(int i=13; i<=42; i++) pixels.setPixelColor(i, pixels.Color(255, 0, 0));
+    pixels.show();
+    delay(500);
+    for(int i=13; i<=42; i++) pixels.setPixelColor(i, pixels.Color(0, 0, 0));
+    pixels.show();
+    delay(500);
+    }
   
   // Scene 4
-  // - (input signal) *need to discuss how this works* 
   swordButton.read();
   // - (output) statue servo 360 
   if (swordButton.fell()){
+    delay(5000);
+    Serial.println("Scene 4 Activated");
     servo2_360.write(180);
     servo2_360.write(90);
   }
