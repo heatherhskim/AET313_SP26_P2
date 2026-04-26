@@ -73,7 +73,7 @@ void loop(){
       Serial.println("Scene 2 Activated");
   }
   Serial.println("Scene 2: Warm White LED");
-  for(int i=0; i<=12; i++) pixels.setPixelColor(i, pixels.Color(0, 0, 0)); // 이전 LED 끄기
+  for(int i=0; i<=12; i++) pixels.setPixelColor(i, pixels.Color(0, 0, 0)); 
   for(int i=43; i<=52; i++) pixels.setPixelColor(i, pixels.Color(255, 100, 20));
   pixels.show();
   delay(15000);
